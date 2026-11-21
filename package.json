@@ -1,0 +1,30 @@
+{
+  "name": "agent-reach",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A2A discovery + pitch protocol for agents marketing to agents",
+  "license": "Apache-2.0",
+  "packageManager": "pnpm@10.33.4",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "pnpm -r --filter=./packages/* run build",
+    "typecheck": "pnpm -r --filter=./packages/* run typecheck",
+    "test": "pnpm --filter @agent-reach/core test && pnpm --filter @agent-reach/cli test",
+    "fmt": "prettier --write .",
+    "fmt:check": "prettier --check .",
+    "check": "pnpm fmt:check && pnpm build && pnpm typecheck && pnpm test",
+    "example": "pnpm --filter @agent-reach/example-seller-buyer demo"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

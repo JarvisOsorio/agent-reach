@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "cursor/**"]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    name: fmt · typecheck · test (offline)
+    runs-on: ubuntu-latest
+    env:
+      NODE_NO_WARNINGS: "1"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Format check
+        run: pnpm fmt:check
+
+      - name: Build
+        run: pnpm build
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Unit + integration + stranger CLI tests
+        run: pnpm test
+
+      - name: Example seller → buyer → receipt (offline)
+        run: pnpm example
+
+      - name: Document offline guarantee
+        run: |
+          echo "agent-reach tests use local SQLite (node:sqlite) only."
+          echo "discover/pitch/accept/receipt paths make no network calls."
+          echo "Integrity hashes are computed offline with SHA-256."
