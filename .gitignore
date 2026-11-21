@@ -1,0 +1,16 @@
+node_modules
+dist
+coverage
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+.agent-reach
+.DS_Store
+*.log
+.turbo
+.env
+.env.*
+!.env.example
+tmp
+.pnpm-store

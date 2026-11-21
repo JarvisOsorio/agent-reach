@@ -1,0 +1,17 @@
+{
+  "name": "@agent-reach/example-seller-buyer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "Apache-2.0",
+  "scripts": {
+    "demo": "tsx run.ts"
+  },
+  "dependencies": {
+    "@agent-reach/core": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3"
+  }
+}
