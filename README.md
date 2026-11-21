@@ -2,15 +2,19 @@
 
 **DISCOVER · PITCH · DEAL · RECEIPT**
 
-A2A discovery + pitch protocol for **agents that market to agents**. Machine-readable offer cards, local discover, structured pitch/accept/reject, conversion receipts with integrity hashes.
+A2A discovery + pitch protocol for **agents that market to agents** — offer cards, intent discover, deal receipts.
 
-Not a human ad network. Not an “AI agency” dashboard. Not SEO. Not a SaaS directory in v0.1.
+Agents that sell capabilities to other agents need machine-readable deal flow, not a human ad network. Publish versioned offer cards, discover matches by intent, pitch terms, and accept/reject with a SHA-256 conversion receipt — all local-first on SQLite. Not an “AI agency” dashboard, SEO tool, or SaaS directory in v0.1.
 
 Local-first. TypeScript · Node ≥22 · pnpm · SQLite (`node:sqlite`) · Apache-2.0.
 
-> **v0.1 status:** private until coordinator/user OK for public. Clone this repo (not on npm yet).
+[![CI](https://github.com/JarvisOsorio/agent-reach/actions/workflows/ci.yml/badge.svg)](https://github.com/JarvisOsorio/agent-reach/actions/workflows/ci.yml)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+[![GitHub release](https://img.shields.io/github/v/release/JarvisOsorio/agent-reach?include_prereleases)](https://github.com/JarvisOsorio/agent-reach/releases)
 
 ## Install
+
+**v0.1 path:** clone this repo (not published to npm yet).
 
 ```bash
 git clone https://github.com/JarvisOsorio/agent-reach.git
@@ -54,6 +58,8 @@ console.log(verifyReceipt(receipt)); // true
 reach.close();
 ```
 
+Primary exports from `@agent-reach/core`: `AgentReach`, `verifyReceipt` (plus `buildReceipt`, `discoverOffers`, `validateOfferInput`, `ReachStore`, schema constants, and types). Core verbs: `publish` → `discover` → `pitch` → `accept` / `reject`.
+
 ## CLI
 
 | Command                                                         | Purpose                               |
@@ -69,7 +75,7 @@ reach.close();
 | `agent-reach export <path>` / `import <path>`                   | Portable JSON bundle                  |
 | `agent-reach doctor`                                            | Honest readiness (agents-only flags)  |
 
-Common flags: `--json`, `--db <path>`.
+Common flags: `--json`, `--db <path>`, discover `--capability` / `--tag` / `--pricing` / `--limit`, accept/reject `--reason`, import `--replace`.
 
 ### Exit codes
 
@@ -80,14 +86,24 @@ Common flags: `--json`, `--db <path>`.
 | 2    | Invalid input / schema / integrity failure |
 | 3    | Infrastructure / storage error             |
 
-## Honesty
+## Example
+
+`examples/seller-buyer-flow` runs the full path (accept + reject) with receipt integrity checks:
+
+```bash
+pnpm example
+```
+
+## Honesty / non-goals
 
 | This product                                                                 | Not this product                             |
 | ---------------------------------------------------------------------------- | -------------------------------------------- |
 | Offer cards for **agents** (capabilities, MCP/HTTP endpoints, pricing hints) | Human creative studio / social posting / SEO |
 | Local discover by intent tokens + capability filters                         | Cloud marketplace SaaS directory (v0.1)      |
 | Structured pitch → accept/reject + hashed conversion receipt                 | Autonomous “full agency” monolith            |
-| Hermetic SQLite + JSON export/import                                         | LLM wrapper / agent framework                |
+| Hermetic SQLite + JSON export/import                                         | LLM wrapper / agent framework / tracing UI   |
+
+What v0.1 does **not** include: human ad creatives, ranking ML, payments settlement, multi-tenant cloud directory, Langfuse/tracing, npm publish, merging Replay Lab or Outcome.
 
 ### Sibling boundaries (do not merge)
 
@@ -107,18 +123,6 @@ JSON Schema: `packages/core/schemas/offer.v1.json`.
 ## Conversion receipts
 
 On accept/reject, agent-reach writes a `agent-reach.receipt.v1` document with `integrityHash` = SHA-256 of the canonical JSON body (hash field excluded). Tampering the decision/terms without rehashing fails `verifyReceipt`.
-
-## Example
-
-`examples/seller-buyer-flow` runs the full path in-memory:
-
-```bash
-pnpm example
-```
-
-## What v0.1 does **not** include
-
-Human ad creatives, ranking ML, payments settlement, multi-tenant cloud directory, Langfuse/tracing, merging Replay Lab or Outcome. Not published to npm yet.
 
 ## License
 
